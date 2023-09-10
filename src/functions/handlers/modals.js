@@ -6,7 +6,7 @@ const logger = new Logger();
  * @type {module}
  */
 
-module.exports = (client) => {
+module.exports = async (client) => {
 
     const {readdirSync} = require('fs');
     const {join} = require('path');
@@ -18,6 +18,7 @@ module.exports = (client) => {
             const modal = require(`../../modals/${dir}/${file}`);
             await client.modals.set(modal.data.customId, modal);
             client.modalArray.push(modal.data.toJSON());
+            console.log(`Loaded modal ${modal.data.customId} at ${dir}/${file}`);
         }
     }
 

@@ -78,8 +78,17 @@ module.exports = {
 
         try {
 
+            // Get tag ID
+            const channel = await interaction.guild.channels.cache.get(interaction.options.getString('type'));
+            if (!channel) return;
+
+            const tag = channel.availableTags.find(tag => tag.name === arguments.tags).id
+            if (!tag) return;
+
+            console.log(tag)
+
             const modal = new ModalBuilder()
-                .setCustomId(`createArticle_${id}_${arguments.tags}`)
+                .setCustomId(`createArticle_${id}_${tag}`)
                 .setTitle('Create Article')
 
             const titleInput = new TextInputBuilder()

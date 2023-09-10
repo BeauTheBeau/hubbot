@@ -155,11 +155,7 @@ module.exports = async (client) => {
                     await ratingMessage.react('🟩');
                     await ratingMessage.react('🟨');
                     await ratingMessage.react('🟥');
-
-
                 }
-
-
             }
 
         } else {
