@@ -1,8 +1,8 @@
 const {SlashCommandBuilder, PermissionsBitField} = require("discord.js");
-const {Logger} = require("../../functions/utilities/loggingUtils.js");
-const {EmbedUtils} = require("../../functions/utilities/embedUtils");
+const {Logger} = require("../src/functions/utilities/loggingUtils.js");
+const {EmbedUtils} = require("../src/functions/utilities/embedUtils");
 const logger = new Logger();
-const userModel = require('../../models/userModel.js');
+const userModel = require('../src/models/userModel.js');
 
 
 module.exports = {

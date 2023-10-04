@@ -5,13 +5,13 @@ const {
     TextInputBuilder,
     TextInputStyle
 } = require('discord.js');
-const {EmbedUtils} = require('../../functions/utilities/embedUtils');
-const {Logger} = require('../../functions/utilities/loggingUtils.js')
+const {EmbedUtils} = require('../src/functions/utilities/embedUtils');
+const {Logger} = require('../src/functions/utilities/loggingUtils.js')
 const logger = new Logger();
 const embedUtils = new EmbedUtils(logger);
 
-const userModel = require('../../models/userModel.js');
-const articleModel = require('../../models/articleModel.js');
+const userModel = require('../src/models/userModel.js');
+const articleModel = require('../src/models/articleModel.js');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -82,10 +82,7 @@ module.exports = {
             const channel = await interaction.guild.channels.cache.get(interaction.options.getString('type'));
             if (!channel) return;
 
-            const tag = channel.availableTags.find(tag => tag.name === arguments.tags).id
-            if (!tag) return;
-
-            console.log(tag)
+            const tag = channel.availableTags.find(tag => tag.name === arguments.tags).id;
 
             const modal = new ModalBuilder()
                 .setCustomId(`createArticle_${id}_${tag}`)
