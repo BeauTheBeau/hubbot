@@ -63,18 +63,6 @@ module.exports = async (client) => {
             await newUser.save();
         }
 
-        if (interaction.isAutocomplete()) {
-            const command = client.commands.get(interaction.commandName);
-            if (!command) return interaction.reply({content: 'Whoops! Something went wrong.', ephemeral: true});
-
-            try {
-                await command.autocomplete(interaction);
-            } catch (error) {
-                logger.error(`Error executing autocomplete for ${interaction.commandName}`);
-                logger.error(error.stack);
-            }
-        }
-
         if (interaction.isModalSubmit()) {
 
             // createArticle_${id}_${arguments.tags}
