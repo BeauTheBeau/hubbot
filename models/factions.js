@@ -19,7 +19,7 @@ const factionSchema = new mongoose.Schema({
     wars: { type: Number, required: false },
     wins: { type: Number, required: false },
     losses: { type: Number, required: false },
-    draws: { type: Number, required: false }
+    draws: { type: Number, required: false },
 
     // FE: Faction Exchange
     blacklisted: { type: Boolean, required: false },
