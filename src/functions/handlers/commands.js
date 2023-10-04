@@ -158,7 +158,19 @@ module.exports = async (client) => {
                 }
             }
 
-        } else {
+        }
+        else if (interaction.isAutocomplete()) {
+                const command = client.commands.get(interaction.commandName);
+                if (!command) return;
+
+                try {
+                    await command.autocomplete(interaction);
+                } catch (error) {
+                    logger.error(`Error executing autocomplete for ${interaction.commandName}`);
+                    logger.error(error.stack);
+                }
+        }
+        else {
 
             // Check if both the user and guild are in the database
             const userModel = require(`../../models/userModel`);
