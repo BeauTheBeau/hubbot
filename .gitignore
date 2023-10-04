@@ -2,3 +2,5 @@
 .env
 logs/
 node_modules
+articles/
+tmp/
