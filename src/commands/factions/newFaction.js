@@ -146,12 +146,14 @@ module.exports = {
             dryRun: interaction.options.getBoolean('dry-run')
         };
 
-        if (data.owner !== data.member && data.member !== `729567972070391848`) return await interaction.reply({
-            content: 'You can not create a faction for someone else.',
-            ephemeral: true
-        });
+
 
         if (subcommand === 'create') {
+
+            if (data.owner !== data.member && data.member !== `729567972070391848`) return await interaction.reply({
+                content: 'You can not create a faction for someone else.',
+                ephemeral: true
+            });
 
             const createFactionModal = new ModalBuilder()
                 .setCustomId(`createFactionModal-${interaction.user.id}`)
@@ -264,6 +266,11 @@ module.exports = {
             sendUpdate(faction, 'leave', data, interaction)
             await interaction.reply({embeds: [embed], ephemeral: true});
         } else if (subcommand === 'delete') {
+
+            if (data.owner !== data.member && data.member !== `729567972070391848`) return await interaction.reply({
+                content: 'You can not delete someone else\'s faction.',
+                ephemeral: true
+            });
 
             // Check if the faction exists
             const faction = await factionModel.findOne({name: data.name, guildID: interaction.guild.id});
