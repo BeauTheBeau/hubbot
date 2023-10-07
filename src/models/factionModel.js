@@ -7,6 +7,7 @@ const factionSchema = new mongoose.Schema({
     owner: { type: String, required: true, index: true },
     ownerId: { type: String, required: true },
     guildID: { type: String, required: true },
+    locked: { type: Boolean, default: false },
 
     // Faction data
     description: { type: String, required: false },
