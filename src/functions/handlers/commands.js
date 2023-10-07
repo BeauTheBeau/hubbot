@@ -70,8 +70,6 @@ module.exports = async (client) => {
             const articleID = interaction.customId.split('_')[1];
             const tags = interaction.customId.split('_')[2];
 
-            console.log(modalID, articleID, tags)
-
             if (modalID === 'createArticle') {
 
                 const arguments = {
@@ -81,9 +79,6 @@ module.exports = async (client) => {
                     content: interaction.fields.getTextInputValue('content'),
                     coauthors: interaction.fields.getTextInputValue('coauthor') || null,
                 }
-
-                console.log(arguments)
-
                 try {
 
                     const article = await new articleModel({
