@@ -70,6 +70,10 @@ module.exports = {
                 .setName('owner')
                 .setDescription('The owner of the faction. Use their user ID, default is you.')
                 .setRequired(false))
+            .addBooleanOption(option => option
+                .setName('dry-run')
+                .setDescription('If this is true, the faction will not be created.')
+                .setRequired(false))
         )
 
         .addSubcommand(subcommand => subcommand
@@ -121,10 +125,11 @@ module.exports = {
                 .setRequired(true))
         ),
 
-
     async autocomplete(interaction) {
         const focusedOption = interaction.options.getFocused();
-        const choices = await factionModel.find({guildID: interaction.guild.id});
+        let choices;
+        if (interaction.options.getSubcommand() === 'delete') choices = await factionModel.find({guildID: interaction.guild.id, ownerId: interaction.user.id});
+        else choices = await factionModel.find({guildID: interaction.guild.id});
         const filteredChoices = choices.filter(choice => choice.name.toLowerCase().includes(focusedOption.toLowerCase()));
         await interaction.respond(filteredChoices.map(choice => ({name: choice.name, value: choice.name})));
     },
@@ -137,7 +142,8 @@ module.exports = {
             confirm: interaction.options.getString('confirm'),
             description: interaction.options.getString('description'),
             owner: interaction.options.getString('owner'),
-            member: interaction.user.id
+            member: interaction.user.id,
+            dryRun: interaction.options.getBoolean('dry-run')
         };
 
         if (data.owner !== data.member && data.member !== `729567972070391848`) return await interaction.reply({
@@ -188,7 +194,8 @@ module.exports = {
                 members: [data.owner || interaction.user.id],
             });
 
-            await newFaction.save();
+
+            if (!data.dryRun) await newFaction.save();
 
             const embed = new EmbedBuilder()
                 .setTitle(`${data.name} created!`)
@@ -197,11 +204,12 @@ module.exports = {
                     + `\n\n**Description:** ${data.description}`
                     + `\n**Owner:** <@${data.owner || interaction.user.id}>`
                 )
+                .setFooter({text: `Dry run: ${data.dryRun ? 'true' : 'false'}`})
 
             await submitted.reply({embeds: [embed], ephemeral: true});
 
 
-            sendUpdate(newFaction, 'create', data, interaction)
+            if (!data.dryRun) sendUpdate(newFaction, 'create', data, interaction)
         } else if (subcommand === 'join') {
 
             // Check if the faction exists
