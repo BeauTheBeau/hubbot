@@ -63,26 +63,12 @@ module.exports = async (client) => {
             await newUser.save();
         }
 
-        if (interaction.isAutocomplete()) {
-            const command = client.commands.get(interaction.commandName);
-            if (!command) return interaction.reply({content: 'Whoops! Something went wrong.', ephemeral: true});
-
-            try {
-                await command.autocomplete(interaction);
-            } catch (error) {
-                logger.error(`Error executing autocomplete for ${interaction.commandName}`);
-                logger.error(error.stack);
-            }
-        }
-
         if (interaction.isModalSubmit()) {
 
             // createArticle_${id}_${arguments.tags}
             const modalID = interaction.customId.split('_')[0];
             const articleID = interaction.customId.split('_')[1];
             const tags = interaction.customId.split('_')[2];
-
-            console.log(modalID, articleID, tags)
 
             if (modalID === 'createArticle') {
 
@@ -93,9 +79,6 @@ module.exports = async (client) => {
                     content: interaction.fields.getTextInputValue('content'),
                     coauthors: interaction.fields.getTextInputValue('coauthor') || null,
                 }
-
-                console.log(arguments)
-
                 try {
 
                     const article = await new articleModel({
@@ -158,7 +141,19 @@ module.exports = async (client) => {
                 }
             }
 
-        } else {
+        }
+        else if (interaction.isAutocomplete()) {
+                const command = client.commands.get(interaction.commandName);
+                if (!command) return;
+
+                try {
+                    await command.autocomplete(interaction);
+                } catch (error) {
+                    logger.error(`Error executing autocomplete for ${interaction.commandName}`);
+                    logger.error(error.stack);
+                }
+        }
+        else {
 
             // Check if both the user and guild are in the database
             const userModel = require(`../../models/userModel`);
@@ -214,6 +209,8 @@ module.exports = async (client) => {
             try {
                 await command.execute(interaction, client);
             } catch (error) {
+                logger.error(`Error executing ${interaction.commandName}`);
+                logger.error(error.stack);
                 await interaction.reply({content: 'Whoops! Something went wrong.', ephemeral: true});
             }
         }
